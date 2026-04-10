@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DeepOps — DevOps Expert & Cloud Architect</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #080c10;
+    --bg2: #0d1117;
+    --surface: #111820;
+    --border: rgba(0,210,120,0.12);
+    --green: #00d278;
+    --green2: #00ff94;
+    --cyan: #00e5ff;
+    --muted: #4a5a6a;
+    --text: #e8f0f8;
+    --text2: #8a9bb0;
+    --red: #ff4466;
+    --yellow: #ffd166;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Instrument Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--green);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--green);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.15s ease;
+    opacity: 0.5;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,210,120,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,210,120,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(8,12,16,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+
+  .nav-logo span { color: var(--green); }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text2);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--green); }
+
+  .nav-cta {
+    background: var(--green);
+    color: #000 !important;
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-weight: 600 !important;
+    transition: background 0.2s, transform 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--green2) !important; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,210,120,0.08) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,210,120,0.08);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--green);
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .hero h1 .line2 { color: var(--green); }
+  .hero h1 .line3 { color: var(--text2); font-weight: 400; }
+
+  .hero-desc {
+    font-size: 1.15rem;
+    color: var(--text2);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--green);
+    color: #000;
+    padding: 14px 32px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary:hover { background: var(--green2); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,210,120,0.3); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    padding: 14px 32px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.12);
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: var(--green); color: var(--green); }
+
+  /* Stats bar */
+  .stats-bar {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px;
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--green);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text2);
+    letter-spacing: 0.08em;
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 100px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--green);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    line-height: 1.1;
+  }
+
+  .section-sub {
+    color: var(--text2);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    max-width: 540px;
+    margin-bottom: 60px;
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .about-img-box {
+    position: relative;
+  }
+
+  .about-img-placeholder {
+    width: 100%;
+    aspect-ratio: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-img-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,210,120,0.05), transparent);
+  }
+
+  .about-tag {
+    position: absolute;
+    bottom: -16px;
+    right: -16px;
+    background: var(--green);
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+
+  .about-text p {
+    color: var(--text2);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  .skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 28px;
+  }
+
+  .skill-tag {
+    background: rgba(0,210,120,0.07);
+    border: 1px solid var(--border);
+    color: var(--green);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+  }
+
+  .skill-tag:hover { background: rgba(0,210,120,0.15); border-color: var(--green); }
+
+  /* SERVICES */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .service-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--green), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .service-card:hover { border-color: rgba(0,210,120,0.3); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+  .service-card:hover::before { transform: scaleX(1); }
+
+  .service-icon {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .service-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .service-desc {
+    color: var(--text2);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .service-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .service-list li {
+    font-size: 0.85rem;
+    color: var(--text2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .service-list li::before {
+    content: '→';
+    color: var(--green);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .service-price {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--green);
+  }
+
+  /* MENTORSHIP */
+  .mentorship-plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .plan-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .plan-card.featured {
+    border-color: var(--green);
+    background: rgba(0,210,120,0.04);
+  }
+
+  .plan-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--green);
+    color: #000;
+    padding: 4px 16px;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    white-space: nowrap;
+  }
+
+  .plan-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .plan-price {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--green);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .plan-period {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text2);
+    margin-bottom: 24px;
+  }
+
+  .plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .plan-features li {
+    font-size: 0.88rem;
+    color: var(--text2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .plan-features li .check { color: var(--green); }
+
+  .btn-plan {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    transition: all 0.2s;
+    border: 1px solid var(--green);
+    color: var(--green);
+    background: transparent;
+  }
+
+  .btn-plan:hover, .plan-card.featured .btn-plan {
+    background: var(--green);
+    color: #000;
+  }
+
+  /* SAAS PRODUCTS */
+  .saas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .saas-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .saas-card:hover { border-color: rgba(0,210,120,0.3); transform: translateY(-4px); }
+
+  .saas-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 4rem;
+    font-weight: 800;
+    color: rgba(0,210,120,0.08);
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    line-height: 1;
+  }
+
+  .saas-status {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    margin-bottom: 16px;
+  }
+
+  .status-live { background: rgba(0,210,120,0.12); color: var(--green); border: 1px solid rgba(0,210,120,0.3); }
+  .status-soon { background: rgba(255,209,102,0.1); color: var(--yellow); border: 1px solid rgba(255,209,102,0.3); }
+  .status-dev { background: rgba(0,229,255,0.08); color: var(--cyan); border: 1px solid rgba(0,229,255,0.2); }
+
+  .saas-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .saas-desc {
+    color: var(--text2);
+    font-size: 0.88rem;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .saas-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .saas-tag {
+    background: rgba(0,229,255,0.06);
+    border: 1px solid rgba(0,229,255,0.15);
+    color: var(--cyan);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+  }
+
+  /* PROCESS */
+  .process-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .process-step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 32px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+
+  .process-step:hover .step-num { color: var(--green); }
+
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--muted);
+    line-height: 1;
+    transition: color 0.2s;
+  }
+
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .step-desc {
+    color: var(--text2);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  /* TECH STACK SECTION */
+  .tech-marquee {
+    overflow: hidden;
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: relative;
+    z-index: 1;
+  }
+
+  .tech-track {
+    display: flex;
+    gap: 48px;
+    animation: scroll 20s linear infinite;
+    width: max-content;
+  }
+
+  .tech-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text2);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tech-item span { color: var(--green); }
+
+  @keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* CTA SECTION */
+  .cta-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,210,120,0.1) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .cta-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .cta-section p {
+    color: var(--text2);
+    font-size: 1.05rem;
+    margin-bottom: 36px;
+    position: relative;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+  }
+
+  /* CONTACT */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+  }
+
+  .contact-info h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .contact-info p {
+    color: var(--text2);
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+
+  .contact-link:hover { color: var(--green); }
+
+  .contact-link-icon {
+    width: 36px; height: 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-group label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+    appearance: none;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--green); }
+
+  .form-group select option { background: var(--bg2); }
+
+  .form-submit {
+    background: var(--green);
+    color: #000;
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: none;
+    transition: all 0.2s;
+    font-family: 'Instrument Sans', sans-serif;
+  }
+
+  .form-submit:hover { background: var(--green2); transform: translateY(-2px); }
+
+  /* FOOTER */
+  footer {
+    padding: 40px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--text);
+  }
+
+  .footer-logo span { color: var(--green); }
+
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  /* Terminal widget */
+  .terminal {
+    background: #0a0e12;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 48px;
+  }
+
+  .terminal-bar {
+    background: var(--surface);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #ffbd2e; }
+  .dot.g { background: #28ca41; }
+
+  .terminal-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-left: 8px;
+  }
+
+  .terminal-body {
+    padding: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.9;
+  }
+
+  .t-line { display: block; }
+  .t-prompt { color: var(--green); }
+  .t-cmd { color: var(--text); }
+  .t-out { color: var(--text2); }
+  .t-success { color: var(--green); }
+  .t-cyan { color: var(--cyan); }
+  .t-yellow { color: var(--yellow); }
+
+  .cursor-blink {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--green);
+    animation: blink 1s infinite;
+    vertical-align: middle;
+  }
+
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Divider */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 20px 60px; }
+    section { padding: 60px 20px; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; }
+    .stats-bar { gap: 40px; padding: 24px 20px; }
+    footer { flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Deep<span>Ops</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#mentorship">Mentorship</a></li>
+    <li><a href="#saas">SaaS</a></li>
+    <li><a href="#contact" class="nav-cta">Hire Me</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Available for Projects & Mentorship</div>
+    <h1>
+      I Build,<br>
+      <span class="line2">Deploy &amp; Scale</span><br>
+      <span class="line3">Cloud Infrastructure.</span>
+    </h1>
+    <p class="hero-desc">
+      Senior DevOps Engineer &amp; Full Stack Developer with 5+ years of experience. 
+      I help startups and teams ship faster, scale smarter, and sleep better.
+    </p>
+    <div class="hero-actions">
+      <a href="#services" class="btn-primary">Explore Services →</a>
+      <a href="#contact" class="btn-secondary">Book a Call</a>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot r"></div>
+        <div class="dot y"></div>
+        <div class="dot g"></div>
+        <span class="terminal-title">deep@deepops.in ~ bash</span>
+      </div>
+      <div class="terminal-body">
+        <span class="t-line"><span class="t-prompt">→ </span><span class="t-cmd">whoami</span></span>
+        <span class="t-line t-out">Deep — DevOps Engineer | Full Stack Developer | Cloud Architect</span>
+        <span class="t-line"><span class="t-prompt">→ </span><span class="t-cmd">cat skills.txt</span></span>
+        <span class="t-line"><span class="t-cyan">DevOps</span> <span class="t-out">|</span> <span class="t-cyan">Kubernetes</span> <span class="t-out">|</span> <span class="t-cyan">Docker</span> <span class="t-out">|</span> <span class="t-cyan">AWS</span> <span class="t-out">|</span> <span class="t-cyan">CI/CD</span> <span class="t-out">|</span> <span class="t-cyan">Monitoring</span></span>
+        <span class="t-line"><span class="t-cyan">React</span> <span class="t-out">|</span> <span class="t-cyan">Node.js</span> <span class="t-out">|</span> <span class="t-cyan">PostgreSQL</span> <span class="t-out">|</span> <span class="t-cyan">Next.js</span></span>
+        <span class="t-line"><span class="t-prompt">→ </span><span class="t-cmd">status --check</span></span>
+        <span class="t-line t-success">✓ Available for new projects</span>
+        <span class="t-line t-success">✓ Mentorship slots open</span>
+        <span class="t-line t-yellow">$ <span class="cursor-blink"></span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num">5+</div>
+    <div class="stat-label">Years Experience</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">50+</div>
+    <div class="stat-label">Projects Delivered</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">30+</div>
+    <div class="stat-label">Happy Clients</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">3</div>
+    <div class="stat-label">SaaS Products</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">99.9%</div>
+    <div class="stat-label">Uptime Delivered</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-img-box fade-up">
+      <div class="about-img-placeholder">👨‍💻</div>
+      <div class="about-tag">5 Yrs • DevOps + Full Stack</div>
+    </div>
+    <div class="about-text fade-up">
+      <div class="section-label">// about me</div>
+      <h2 class="section-title">Hi, I'm Deep.</h2>
+      <p>
+        I'm a Senior DevOps Engineer and Full Stack Developer with 5+ years of hands-on experience building, deploying, and scaling production infrastructure for startups and enterprises.
+      </p>
+      <p>
+        From setting up CI/CD pipelines from scratch to architecting cloud infrastructure that handles millions of requests — I've done it all. I also build full stack web applications and SaaS products that solve real problems.
+      </p>
+      <p>
+        Currently I offer 1-on-1 mentorship, freelance DevOps & development work, SaaS consulting, and I'm building my own suite of DevOps tools.
+      </p>
+      <div class="skills-grid">
+        <span class="skill-tag">Kubernetes</span>
+        <span class="skill-tag">Docker</span>
+        <span class="skill-tag">AWS</span>
+        <span class="skill-tag">GCP</span>
+        <span class="skill-tag">CI/CD</span>
+        <span class="skill-tag">Terraform</span>
+        <span class="skill-tag">Prometheus</span>
+        <span class="skill-tag">Grafana</span>
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">Next.js</span>
+        <span class="skill-tag">PostgreSQL</span>
+        <span class="skill-tag">Redis</span>
+        <span class="skill-tag">Nginx</span>
+        <span class="skill-tag">Linux</span>
+        <span class="skill-tag">GitHub Actions</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH MARQUEE -->
+<div class="tech-marquee">
+  <div class="tech-track">
+    <span class="tech-item"><span>▸</span> AWS</span>
+    <span class="tech-item"><span>▸</span> Kubernetes</span>
+    <span class="tech-item"><span>▸</span> Docker</span>
+    <span class="tech-item"><span>▸</span> Terraform</span>
+    <span class="tech-item"><span>▸</span> Prometheus</span>
+    <span class="tech-item"><span>▸</span> Grafana</span>
+    <span class="tech-item"><span>▸</span> GitHub Actions</span>
+    <span class="tech-item"><span>▸</span> Jenkins</span>
+    <span class="tech-item"><span>▸</span> React</span>
+    <span class="tech-item"><span>▸</span> Node.js</span>
+    <span class="tech-item"><span>▸</span> Next.js</span>
+    <span class="tech-item"><span>▸</span> PostgreSQL</span>
+    <span class="tech-item"><span>▸</span> Redis</span>
+    <span class="tech-item"><span>▸</span> Nginx</span>
+    <span class="tech-item"><span>▸</span> Linux</span>
+    <span class="tech-item"><span>▸</span> GCP</span>
+    <span class="tech-item"><span>▸</span> AWS</span>
+    <span class="tech-item"><span>▸</span> Kubernetes</span>
+    <span class="tech-item"><span>▸</span> Docker</span>
+    <span class="tech-item"><span>▸</span> Terraform</span>
+    <span class="tech-item"><span>▸</span> Prometheus</span>
+    <span class="tech-item"><span>▸</span> Grafana</span>
+    <span class="tech-item"><span>▸</span> GitHub Actions</span>
+    <span class="tech-item"><span>▸</span> Jenkins</span>
+    <span class="tech-item"><span>▸</span> React</span>
+    <span class="tech-item"><span>▸</span> Node.js</span>
+    <span class="tech-item"><span>▸</span> Next.js</span>
+    <span class="tech-item"><span>▸</span> PostgreSQL</span>
+    <span class="tech-item"><span>▸</span> Redis</span>
+    <span class="tech-item"><span>▸</span> Nginx</span>
+    <span class="tech-item"><span>▸</span> Linux</span>
+    <span class="tech-item"><span>▸</span> GCP</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-label fade-up">// what i do</div>
+  <h2 class="section-title fade-up">Services I Offer</h2>
+  <p class="section-sub fade-up">End-to-end expertise across DevOps, cloud infrastructure, full stack development, and consulting.</p>
+
+  <div class="services-grid">
+    <div class="service-card fade-up">
+      <span class="service-icon">⚙️</span>
+      <div class="service-title">DevOps Engineering</div>
+      <p class="service-desc">Complete DevOps setup, pipeline automation, and infrastructure management for your team.</p>
+      <ul class="service-list">
+        <li>CI/CD Pipeline Setup (GitHub Actions, Jenkins)</li>
+        <li>Docker & Kubernetes Orchestration</li>
+        <li>Infrastructure as Code (Terraform)</li>
+        <li>Cloud Setup — AWS / GCP / Azure</li>
+        <li>Security hardening & best practices</li>
+      </ul>
+      <div class="service-price">Starting ₹15,000 / project</div>
+    </div>
+
+    <div class="service-card fade-up">
+      <span class="service-icon">📊</span>
+      <div class="service-title">Monitoring & Observability</div>
+      <p class="service-desc">Full-stack monitoring setup so you know what's happening in your infrastructure 24/7.</p>
+      <ul class="service-list">
+        <li>Prometheus + Grafana dashboards</li>
+        <li>Log management (ELK stack)</li>
+        <li>Uptime & alert configuration</li>
+        <li>APM & performance monitoring</li>
+        <li>On-call runbooks & documentation</li>
+      </ul>
+      <div class="service-price">Starting ₹10,000 / setup</div>
+    </div>
+
+    <div class="service-card fade-up">
+      <span class="service-icon">🌐</span>
+      <div class="service-title">Full Stack Development</div>
+      <p class="service-desc">End-to-end web application development from design to deployment.</p>
+      <ul class="service-list">
+        <li>React / Next.js frontend</li>
+        <li>Node.js / Express backend</li>
+        <li>Database design (PostgreSQL, MongoDB)</li>
+        <li>REST API & integrations</li>
+        <li>Production deployment included</li>
+      </ul>
+      <div class="service-price">Starting ₹25,000 / project</div>
+    </div>
+
+    <div class="service-card fade-up">
+      <span class="service-icon">🚀</span>
+      <div class="service-title">SaaS Consulting</div>
+      <p class="service-desc">Help startups architect, build, and scale SaaS products the right way.</p>
+      <ul class="service-list">
+        <li>Architecture review & planning</li>
+        <li>Scalability & performance audit</li>
+        <li>Cloud cost optimization</li>
+        <li>Tech stack recommendations</li>
+        <li>Team DevOps onboarding</li>
+      </ul>
+      <div class="service-price">₹1,500 / hour</div>
+    </div>
+
+    <div class="service-card fade-up">
+      <span class="service-icon">🔧</span>
+      <div class="service-title">Freelance Projects</div>
+      <p class="service-desc">Need a reliable engineer for your project? I deliver quality work on time, every time.</p>
+      <ul class="service-list">
+        <li>Short-term & long-term contracts</li>
+        <li>Remote / flexible availability</li>
+        <li>Clear communication & updates</li>
+        <li>Code reviews & technical audits</li>
+        <li>Post-delivery support</li>
+      </ul>
+      <div class="service-price">Contact for pricing</div>
+    </div>
+
+    <div class="service-card fade-up">
+      <span class="service-icon">🧩</span>
+      <div class="service-title">Managed DevOps</div>
+      <p class="service-desc">Don't have a DevOps team? I'll be your dedicated DevOps engineer on a monthly retainer.</p>
+      <ul class="service-list">
+        <li>Ongoing infrastructure management</li>
+        <li>Incident response & on-call</li>
+        <li>Monthly reporting & optimization</li>
+        <li>Unlimited support via Slack</li>
+        <li>Proactive improvements</li>
+      </ul>
+      <div class="service-price">Starting ₹20,000 / month</div>
+    </div>
+  </div>
+</section>
+
+<!-- MENTORSHIP -->
+<section id="mentorship">
+  <div class="section-label fade-up">// learn from experience</div>
+  <h2 class="section-title fade-up">1-on-1 Mentorship</h2>
+  <p class="section-sub fade-up">Get personalized guidance from a working DevOps engineer. No fluff — real world advice, real career growth.</p>
+
+  <div class="mentorship-plans">
+    <div class="plan-card fade-up">
+      <div class="plan-name">Starter Session</div>
+      <div class="plan-price">₹1,999</div>
+      <div class="plan-period">per session (60 min)</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span> 1-hour video call</li>
+        <li><span class="check">✓</span> Career roadmap review</li>
+        <li><span class="check">✓</span> Q&A on any topic</li>
+        <li><span class="check">✓</span> Resource list shared</li>
+        <li><span class="check">✓</span> Session recording</li>
+      </ul>
+      <a href="#contact" class="btn-plan">Book Session</a>
+    </div>
+
+    <div class="plan-card featured fade-up">
+      <div class="plan-badge">MOST POPULAR</div>
+      <div class="plan-name">Monthly Mentorship</div>
+      <div class="plan-price">₹7,999</div>
+      <div class="plan-period">per month (4 sessions)</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span> 4 x 60-min sessions</li>
+        <li><span class="check">✓</span> Personalized learning plan</li>
+        <li><span class="check">✓</span> Resume & LinkedIn review</li>
+        <li><span class="check">✓</span> Project code review</li>
+        <li><span class="check">✓</span> WhatsApp support</li>
+        <li><span class="check">✓</span> Mock interviews</li>
+      </ul>
+      <a href="#contact" class="btn-plan">Get Started</a>
+    </div>
+
+    <div class="plan-card fade-up">
+      <div class="plan-name">Intensive Program</div>
+      <div class="plan-price">₹19,999</div>
+      <div class="plan-period">3 months program</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span> 12 sessions (3/month)</li>
+        <li><span class="check">✓</span> Full DevOps roadmap</li>
+        <li><span class="check">✓</span> Hands-on project building</li>
+        <li><span class="check">✓</span> Job placement support</li>
+        <li><span class="check">✓</span> Priority WhatsApp</li>
+        <li><span class="check">✓</span> Certificate of completion</li>
+      </ul>
+      <a href="#contact" class="btn-plan">Apply Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- SAAS PRODUCTS -->
+<section id="saas">
+  <div class="section-label fade-up">// products i'm building</div>
+  <h2 class="section-title fade-up">SaaS Products</h2>
+  <p class="section-sub fade-up">Affordable DevOps tools built for Indian startups and developers. No bloated enterprise pricing.</p>
+
+  <div class="saas-grid">
+    <div class="saas-card fade-up">
+      <div class="saas-num">01</div>
+      <span class="saas-status status-dev">In Development</span>
+      <div class="saas-title">DeepOps Monitor</div>
+      <p class="saas-desc">Real-time server and application monitoring dashboard. Track CPU, memory, uptime, and get instant alerts — without the Datadog bill.</p>
+      <div class="saas-tags">
+        <span class="saas-tag">Server Monitoring</span>
+        <span class="saas-tag">Uptime</span>
+        <span class="saas-tag">Alerts</span>
+        <span class="saas-tag">Grafana-like</span>
+      </div>
+    </div>
+
+    <div class="saas-card fade-up">
+      <div class="saas-num">02</div>
+      <span class="saas-status status-soon">Coming Soon</span>
+      <div class="saas-title">DeepOps Deploy</div>
+      <p class="saas-desc">Simple CI/CD and deployment platform. Push code to Git and watch it deploy automatically — Vercel-like experience for backend apps.</p>
+      <div class="saas-tags">
+        <span class="saas-tag">CI/CD</span>
+        <span class="saas-tag">Auto Deploy</span>
+        <span class="saas-tag">Rollback</span>
+        <span class="saas-tag">Git Integration</span>
+      </div>
+    </div>
+
+    <div class="saas-card fade-up">
+      <div class="saas-num">03</div>
+      <span class="saas-status status-soon">Coming Soon</span>
+      <div class="saas-title">DeepOps Auto</div>
+      <p class="saas-desc">DevOps automation platform. Create rules like "if CPU > 90%, restart service" using a visual drag-and-drop workflow builder. Zapier for infra.</p>
+      <div class="saas-tags">
+        <span class="saas-tag">Automation</span>
+        <span class="saas-tag">Workflow Builder</span>
+        <span class="saas-tag">Scheduling</span>
+        <span class="saas-tag">Multi-server</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW I WORK -->
+<section id="process">
+  <div class="section-label fade-up">// my process</div>
+  <h2 class="section-title fade-up">How I Work</h2>
+  <p class="section-sub fade-up">Simple, transparent, and results-driven. Here's what working with me looks like.</p>
+
+  <div class="process-steps">
+    <div class="process-step fade-up">
+      <div class="step-num">01</div>
+      <div>
+        <div class="step-title">Discovery Call</div>
+        <p class="step-desc">We jump on a free 30-min call to understand your needs, current stack, pain points and goals. No obligation.</p>
+      </div>
+    </div>
+    <div class="process-step fade-up">
+      <div class="step-num">02</div>
+      <div>
+        <div class="step-title">Proposal & Scope</div>
+        <p class="step-desc">I send a clear proposal with timeline, deliverables, and pricing. No hidden costs, no surprises.</p>
+      </div>
+    </div>
+    <div class="process-step fade-up">
+      <div class="step-num">03</div>
+      <div>
+        <div class="step-title">Execution</div>
+        <p class="step-desc">I get to work. Regular updates via WhatsApp/Slack so you always know what's happening. Fast delivery.</p>
+      </div>
+    </div>
+    <div class="process-step fade-up">
+      <div class="step-num">04</div>
+      <div>
+        <div class="step-title">Handover & Support</div>
+        <p class="step-desc">Complete documentation, knowledge transfer, and post-delivery support. You're never left hanging.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Ready to Work Together?</h2>
+  <p>Whether you need DevOps help, a mentor, or want to build something great — let's talk.</p>
+  <div class="cta-actions">
+    <a href="#contact" class="btn-primary">Start a Project →</a>
+    <a href="#mentorship" class="btn-secondary">Book Mentorship</a>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label fade-up">// get in touch</div>
+  <h2 class="section-title fade-up">Let's Work Together</h2>
+
+  <div class="contact-grid">
+    <div class="contact-info fade-up">
+      <h3>Have a project in mind?</h3>
+      <p>Fill out the form or reach out directly. I typically respond within 24 hours. Let's figure out how I can help you.</p>
+
+      <div class="contact-links">
+        <a href="mailto:deep@deepops.in" class="contact-link">
+          <div class="contact-link-icon">📧</div>
+          deep@deepops.in
+        </a>
+        <a href="https://wa.me/91XXXXXXXXXX" class="contact-link">
+          <div class="contact-link-icon">💬</div>
+          WhatsApp — Quick Response
+        </a>
+        <a href="https://linkedin.com/in/deep" class="contact-link">
+          <div class="contact-link-icon">🔗</div>
+          LinkedIn Profile
+        </a>
+        <a href="https://github.com/deep" class="contact-link">
+          <div class="contact-link-icon">🐙</div>
+          GitHub — See my work
+        </a>
+      </div>
+    </div>
+
+    <div class="fade-up">
+      <div class="contact-form">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" placeholder="Rahul Sharma"/>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="rahul@company.com"/>
+        </div>
+        <div class="form-group">
+          <label>Service Needed</label>
+          <select>
+            <option>DevOps Engineering</option>
+            <option>Monitoring Setup</option>
+            <option>Full Stack Development</option>
+            <option>SaaS Consulting</option>
+            <option>Freelance Project</option>
+            <option>Managed DevOps</option>
+            <option>1-on-1 Mentorship</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea rows="4" placeholder="Tell me about your project or what you need help with..."></textarea>
+        </div>
+        <button class="form-submit">Send Message →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Deep<span>Ops</span>.in</div>
+  <div class="footer-copy">© 2024 DeepOps. Built with ❤️ by Deep.</div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx - 5 + 'px';
+    cursor.style.top = my - 5 + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx - 18 + 'px';
+    ring.style.top = ry - 18 + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Scroll animations
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
